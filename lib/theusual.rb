@@ -1,5 +1,6 @@
 require_relative 'theusual/array.rb'
 require_relative 'theusual/hash.rb'
+require_relative 'theusual/time.rb'
 
 
 module TheUsual
