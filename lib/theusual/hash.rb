@@ -1,88 +1,50 @@
-Hash.class_eval do
+class Hash
+
   class << self
-    def symbolize_keys_deep!(h)
-      return nil unless h
-
-      h.keys.each do |k|
-        ks    = k.respond_to?(:to_sym) ? k.to_sym : k
-        h[ks] = h.delete k # Preserve order even when k == ks
-        symbolize_keys_deep! h[ks] if h[ks].kind_of? Hash
-      end
-
-      h
-    end
 
     # map any Enumerable into a Hash, like Hash[obj.map ... ]
     def map(obj, &block)
       Hash[
-          obj.map do |*args|
-            block.call *args
-          end.compact
+        obj.map do |*args|
+          block.call *args
+        end.compact
       ]
     end
 
-    # convenience wrappers
-    def sort_by(hash, &block)
-      Hash[
-          if block.arity == 1
-            hash.sort_by do |k, v|
-              block.call(v)
-            end
-          else
-            hash.sort_by do |k, v|
-              block.call(k, v)
-            end
-          end
-      ]
-    end
-
-    def sort_by!(hash, &block)
-      res = sort_by hash, &block
-      hash.clear
-      hash.merge! res
-    end
   end # class << self
 
 
   def select_keys(*keys)
-    keys = keys.first if keys.length == 1 and keys.first.is_a? Array
+    if keys.length == 1 and keys.first.class < Enumerable
+      keys = keys.first
+    end
+
     Hash.map keys do |k|
       [ k, self[k] ]
     end
   end
 
   def select_keys!(*keys)
-    hash = select_keys *keys
-    clear
-    merge! hash
+    replace select_keys *keys
   end
 
-  # Allows you to get a diff between two hashes, useful when debugging API responses in the console.
-  def diff(other)
-    (self.keys + other.keys).uniq.inject({}) do |memo, key|
-      unless self[key] == other[key]
-        if self[key].kind_of?(Hash) &&  other[key].kind_of?(Hash)
-          memo[key] = self[key].diff(other[key])
-        else
-          memo[key] = [self[key], other[key]]
-        end
-      end
-      memo
+
+  def compact(modifier = nil)
+    falsy = modifier == :falsy
+    blanks = falsy || modifier == :blanks
+
+    reject do |k, v|
+      isblank = blanks && v.respond_to?(:empty?) && v.empty?
+      isfalsy = falsy && (v == 0)
+
+      !v || isblank || isfalsy
     end
   end
 
-  def compact(also_blanks = false)
-    reject do |k,v|
-      !v || (also_blanks && v.blank?)
-    end
-
+  def compact!(modifier = nil)
+    replace compact(modifier)
   end
 
-  def compact!(also_blanks = false)
-    hash = compact(also_blanks)
-    clear
-    merge! hash
-  end
 
   # map the block's results back to a hash
   def hmap(&block)
@@ -90,12 +52,12 @@ Hash.class_eval do
   end
 
   def hmap!(&block)
-    hash = hmap &block
-    clear
-    merge! hash
+    replace hmap &block
   end
 
+
   # map keys, but preserve associated values
+  # ie. http://apidock.com/rails/v4.2.7/Hash/transform_keys
   def kmap(&block)
     Hash[map do |k, v|
       [ block.arity == 1 ? block.call(k) : block.call(k, v), v ]
@@ -104,12 +66,12 @@ Hash.class_eval do
   end
 
   def kmap!(&block)
-    hash = kmap &block
-    clear
-    merge! hash
+    replace kmap &block
   end
 
+
   # map values, but preserve associated keys
+  # ie. http://apidock.com/rails/v4.2.7/Hash/transform_values
   def vmap(&block)
     Hash[map do |k, v|
       [ k, block.arity == 1 ? block.call(v) : block.call(k, v) ]
@@ -117,23 +79,58 @@ Hash.class_eval do
   end
 
   def vmap!(&block)
-    merge!(vmap(&block))
+    replace vmap &block
   end
 
-  # sort by key values
-  def ksort
-    Hash[ sort_by {|k, v| k} ]
+
+  # sort by key values, for pretty printing
+  def ksort(&block)
+    Hash[
+      sort_by do |k, v|
+        if block
+          yield k
+        else
+          k
+        end
+      end
+    ]
   end
 
-  def ksort!
-    hash = kmap &block
+  def ksort!(&block)
+    replace ksort &block
+  end
+
+
+  def vsort(&block)
+    Hash[
+      sort_by do |k, v|
+        if block
+          yield v
+        else
+          v
+        end
+      end
+    ]
+  end
+
+  def vsort!(&block)
+    replace vsort &block
+  end
+
+
+  # set like operator
+  def -(other)
+    raise TypeError unless other.class <= Hash
+    select {|k,v| !other.has_key? k}
+  end
+
+
+  private
+
+  # replace contents of hash with new stuff
+  def replace(hash)
     clear
     merge! hash
   end
 
-  def vsort
-    Hash.sort_by self do |v|
-      v
-    end
-  end
 end
