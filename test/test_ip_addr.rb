@@ -1,7 +1,6 @@
 require 'minitest/autorun'
 require 'theusual'
-
-TheUsual::load('ipaddr')
+TheUsual::load 'ipaddr'
 
 
 class IPAddrTest < Minitest::Test

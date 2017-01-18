@@ -1,23 +1,35 @@
-require_relative 'theusual/array.rb'
-require_relative 'theusual/hash.rb'
-require_relative 'theusual/time.rb'
-
-
 module TheUsual
   VERSION = '0.0.1'
 
+  MODULES = [
+    'array',
+    'hash',
+    'ipaddr',
+    'mongoid',
+    'net/ssh',
+    'time',
+  ]
+
   def self.load *modules
+    needs_load = [
+      'ipaddr',
+      'mongoid',
+      'net/ssh',
+    ]
+
     paths = {
-      'ipaddr' => 'ipaddr',
-      'mongoid' => 'mongoid',
       'net/ssh' => 'ssh',
     }
 
-    modules.flatten.each do |_module|
-      raise ArgumentException unless paths.has_key? _module
+    modules = MODULES if [:all, 'all', '*'].include? modules
 
-      require _module.to_s
-      require_relative "theusual/#{paths[_module.to_s]}.rb"
+    modules.flatten.map(&:to_s).each do |_module|
+      raise ArgumentException unless MODULES.include? _module
+
+      require _module if needs_load.include? _module
+
+      name = paths[_module] || _module
+      require_relative "theusual/#{name}.rb"
     end
   end
 end

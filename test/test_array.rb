@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require 'theusual'
+TheUsual::load 'array'
 
 
 class ArrayTest < Minitest::Test
