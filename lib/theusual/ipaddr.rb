@@ -1,4 +1,4 @@
-IPAddr.class_eval do
+class IPAddr
   class << self
     # eg. 8.8.8 => 8.8.8.0/24
     def new(addr = '::', family = Socket::AF_UNSPEC)
@@ -28,25 +28,27 @@ IPAddr.class_eval do
     end
   end
 
+
   # eg. 8.8.8.8/24 => 8.8.8
   def short(size = nil)
-    res = to_s
-
     if ipv4?
-      size ||= inspect.split('/')[1].to_i
+      unless size
+        mask = inspect.split('/')[1].chomp('>')
+        size = 8 * mask.split('.').select {|x| x == '255'}.count
+      end
 
-      res = case size
+      case size
       when 32
-        res
+        to_s
       when 24
-        res.split('.').first(3).join('.')
+        to_s.split('.').first(3).join('.')
       when 16
-        res.split('.').first(2).join('.')
+        to_s.split('.').first(2).join('.')
       when 8
-        res.split('.').first
+        to_s.split('.').first
+      else
+        to_s
       end
     end
-
-    res
   end
 end
