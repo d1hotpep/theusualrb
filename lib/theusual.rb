@@ -23,10 +23,12 @@ module TheUsual
       'net/ssh' => 'ssh',
     }
 
-    modules = MODULES if [:all, 'all', '*'].include? modules
+    raise ArgumentError if modules.empty?
+
+    modules = MODULES if [:all, 'all', '*'].include? modules.first
 
     modules.flatten.map(&:to_s).each do |_module|
-      raise ArgumentException unless MODULES.include? _module
+      raise ArgumentError unless MODULES.include? _module
 
       # load standard lib
       require _module if needs_load.include? _module
