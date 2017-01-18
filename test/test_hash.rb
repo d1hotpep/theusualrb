@@ -346,22 +346,4 @@ class HashTest < Minitest::Test
     )
   end
 
-
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
