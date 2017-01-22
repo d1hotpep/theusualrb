@@ -1,5 +1,5 @@
 module TheUsual
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
 
   MODULES = [
     'array',
@@ -23,19 +23,25 @@ module TheUsual
       'net/ssh' => 'ssh',
     }
 
-    raise ArgumentError if modules.empty?
+    raise ArgumentError 'did you mean load(:all) ?' if modules.empty?
 
     modules = MODULES if [:all, 'all', '*'].include? modules.first
 
-    modules.flatten.map(&:to_s).each do |_module|
+    modules.flatten.map(&:to_s).map do |_module|
       raise ArgumentError unless MODULES.include? _module
 
-      # load standard lib
-      require _module if needs_load.include? _module
+      begin
+        # load standard lib
+        require _module if needs_load.include? _module
 
-      # monkey patch
-      name = paths[_module] || _module
-      require_relative "theusual/#{name}.rb"
-    end
+        # monkey patch
+        name = paths[_module] || _module
+        require_relative "theusual/#{name}.rb"
+
+        _module
+      rescue LoadError
+        # base gem not installed...skip monkey patch
+      end
+    end.compact
   end
 end
