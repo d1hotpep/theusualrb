@@ -1,5 +1,5 @@
 module TheUsual
-  VERSION = '0.0.3'
+  VERSION = '0.0.4'
 
   MODULES = [
     'array',
@@ -26,10 +26,19 @@ module TheUsual
 
     raise ArgumentError 'did you mean load(:all) ?' if modules.empty?
 
-    modules = MODULES if [:all, 'all', '*'].include? modules.first
+    modules.map! &:to_s
+    to_load = if [:all, 'all', '*'].include? modules.first
+      MODULES
+    else
+      modules
+    end
 
-    modules.flatten.map(&:to_s).map do |_module|
-      raise ArgumentError unless MODULES.include? _module
+    to_load.flatten.map(&:to_s).map do |_module|
+      unless MODULES.include? _module
+        raise ArgumentError.new(
+          "can not load utils for module: #{_module}"
+        )
+      end
 
       begin
         # load standard lib
@@ -41,7 +50,13 @@ module TheUsual
 
         _module
       rescue LoadError
-        # base gem not installed...skip monkey patch
+        # underlying gem not installed
+        # for :all, just skip monkey patch
+        if modules.include? _module
+          raise ArgumentError.new(
+            "missing library gem: gem install #{_module}"
+          )
+        end
       end
     end.compact
   end
