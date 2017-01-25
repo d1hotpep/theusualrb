@@ -16,4 +16,14 @@ class String
   end
 
 
+  def to_bool
+    if self.downcase == 'false'
+      false
+    elsif self.downcase == 'true'
+      true
+    else
+      raise ArgumentError.new "expected 'true' or 'false', got: #{self}"
+    end
+  end
+
 end

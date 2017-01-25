@@ -55,4 +55,22 @@ class HashTest < Minitest::Test
     )
   end
 
+
+  def test_to_bool
+    assert_equal(
+      true,
+      'true'.to_bool
+    )
+
+    assert_equal(
+      true,
+      'True'.to_bool
+    )
+
+    assert_equal(
+      false,
+      'false'.to_bool
+    )
+  end
+
 end
