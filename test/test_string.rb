@@ -25,6 +25,16 @@ class HashTest < Minitest::Test
       true,
       '0'.is_i?
     )
+
+    assert_equal(
+      false,
+      'abc'.is_i?
+    )
+
+    assert_equal(
+      false,
+      '123abc'.is_i?
+    )
   end
 
 
@@ -52,6 +62,11 @@ class HashTest < Minitest::Test
     assert_equal(
       false,
       'abc'.is_f?
+    )
+
+    assert_equal(
+      false,
+      '123.4 abc'.is_f?
     )
   end
 
