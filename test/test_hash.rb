@@ -34,6 +34,67 @@ class HashTest < Minitest::Test
   end
 
 
+  def test_update
+    data = {
+      a: 1,
+      b: 2,
+      c: 3,
+    }
+
+    assert_equal(
+      {a: 1, b: 2, c: 3, d: 4},
+      data.update({d: 4})
+    )
+
+    assert_equal(
+      {a: 1, b: 2, c: 3, d: 4, e: 5},
+      data.update({d: 4, e: 5})
+    )
+
+    assert_equal(
+      {a: 1, b: 2, c: 3, d: 4, e: 5},
+      data.update({d: 4}, {e: 5})
+    )
+
+    assert_equal(
+      {a: 1, b: 2, c: 3, d: 4, e: 5},
+      data.update!({d: 4}, {e: 5})
+    )
+    assert_equal(
+      {a: 1, b: 2, c: 3, d: 4, e: 5},
+      data
+    )
+  end
+
+
+  def test_except
+    data = {
+      a: 1,
+      b: 2,
+      c: 3,
+    }
+
+    assert_equal(
+      {a: 1, b: 2},
+      data.except(:c)
+    )
+
+    assert_equal(
+      {a: 1},
+      data.except(:b, :c)
+    )
+
+    assert_equal(
+      {a: 1},
+      data.except!(:b, :c)
+    )
+    assert_equal(
+      {a: 1},
+      data
+    )
+  end
+
+
   def test_select_keys
     data = {
       c: 2,
