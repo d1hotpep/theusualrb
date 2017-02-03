@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   s.files       = Dir.glob('lib/**/*')
   s.test_files  = Dir.glob('test/**/test_*')
   s.add_development_dependency 'rake', '~> 10'
+  s.add_development_dependency 'minitest', '~> 5'
 end
