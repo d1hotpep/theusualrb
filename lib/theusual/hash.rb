@@ -148,6 +148,15 @@ class Hash
   end
 
 
+  def symbolize_keys
+    clone.symbolize_keys!
+  end
+
+  def symbolize_keys!
+    kmap! { |key| key.to_sym rescue key }
+  end
+
+
   private
 
   # replace contents of hash with new stuff

@@ -1,8 +1,12 @@
+require 'set'
+
+
 module TheUsual
   VERSION = '0.0.4'
 
   MODULES = [
     'array',
+    'failure',
     'hash',
     'ipaddr',
     'mongoid',
@@ -10,6 +14,11 @@ module TheUsual
     'string',
     'time',
   ]
+
+  # functions defined in sub-libs that can be include-ed
+  # into another namespace
+  @include_fns = Set.new
+
 
   def self.load *modules
     # some modules need to be explicitly required
@@ -47,6 +56,7 @@ module TheUsual
         # monkey patch
         name = paths[_module] || _module
         require_relative "theusual/#{name}.rb"
+        ap "theusual/#{name}.rb"
 
         _module
       rescue LoadError
@@ -60,4 +70,19 @@ module TheUsual
       end
     end.compact
   end
+
+
+  def self.include_fn fn
+    @include_fns << fn
+  end
+
+
+  def self.included base
+    @include_fns.each do |name|
+      base.send :define_method, name do |*args|
+        TheUsual.method(name).send *args
+      end
+    end
+  end
+
 end
