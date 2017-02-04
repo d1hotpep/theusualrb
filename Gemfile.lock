@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    theusual (0.0.5)
+    theusual (0.0.6)
 
 GEM
   remote: https://rubygems.org/
