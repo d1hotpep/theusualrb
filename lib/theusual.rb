@@ -1,9 +1,8 @@
 require 'set'
+require_relative 'theusual/version.rb'
 
 
 module TheUsual
-  VERSION = '0.0.5'
-
   MODULES = [
     'array',
     'failure',
@@ -56,7 +55,6 @@ module TheUsual
         # monkey patch
         name = paths[_module] || _module
         require_relative "theusual/#{name}.rb"
-        ap "theusual/#{name}.rb"
 
         _module
       rescue LoadError
