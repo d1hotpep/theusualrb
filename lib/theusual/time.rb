@@ -1,4 +1,16 @@
 class Time
+
+  def self.at_ms ms
+    # convert an integer representing Unix time in milliseconds
+    ms ? Time.at(ms / 1_000.0).utc : nil
+  end
+
+  def to_ms
+    # return the number of milliseconds since the Unix epoc
+    (to_f * 1_000).to_i
+  end
+
+
   def humanize
     a = (Time.now.utc - self.utc).to_i
 
@@ -16,4 +28,5 @@ class Time
       else ((a+180000)/(60*60*24*7)).to_i.to_s + ' weeks ago'
     end
   end
+
 end
