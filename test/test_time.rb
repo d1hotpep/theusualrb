@@ -8,6 +8,8 @@ class TimeTest < Minitest::Test
   def test_ms
     ts = Time.now.utc
 
+    assert(ts.to_ms.class < Integer)
+
     assert(
       # to_ms will truncate, so allow for small error
       ts - Time.at_ms(ts.to_ms) <= 0.001
