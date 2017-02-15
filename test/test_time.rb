@@ -5,7 +5,17 @@ TheUsual::load 'time'
 
 class TimeTest < Minitest::Test
 
-  def test_all
+  def test_ms
+    ts = Time.now.utc
+
+    assert(
+      # to_ms will truncate, so allow for small error
+      ts - Time.at_ms(ts.to_ms) <= 0.001
+    )
+  end
+
+
+  def test_humanize
     assert_equal(
       'just now',
       Time.new.humanize
