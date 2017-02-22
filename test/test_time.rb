@@ -24,18 +24,38 @@ class TimeTest < Minitest::Test
     )
 
     assert_equal(
-      'a second ago',
-      (Time.new - 1).humanize
+      'less than a minute',
+      (Time.new - 50).humanize
     )
 
     assert_equal(
-      '2 seconds ago',
-      (Time.new - 2).humanize
+      'a second',
+      (Time.new - 1).humanize(nil, seconds: true)
     )
 
     assert_equal(
-      'a minute ago',
+      'a minute',
       (Time.new - 60).humanize
+    )
+
+    assert_equal(
+      'an hour',
+      (Time.new - 60 * 60).humanize
+    )
+
+    assert_equal(
+      'an hour',
+      (Time.new - 60 * 60 - 5).humanize
+    )
+
+    assert_equal(
+      'about an hour',
+      (Time.new - 60 * 61).humanize
+    )
+
+    assert_equal(
+      'a day',
+      (Time.new - 60 * 60 * 24).humanize
     )
   end
 
