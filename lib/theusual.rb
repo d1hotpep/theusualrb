@@ -10,6 +10,7 @@ module TheUsual
     'ipaddr',
     'mongoid',
     'net/ssh',
+    'numeric',
     'string',
     'time',
   ]
