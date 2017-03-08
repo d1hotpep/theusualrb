@@ -11,6 +11,7 @@ module TheUsual
     'mongoid',
     'net/ssh',
     'numeric',
+    'sequel',
     'string',
     'time',
   ]
@@ -26,6 +27,7 @@ module TheUsual
       'ipaddr',
       'mongoid',
       'net/ssh',
+      'sequel',
     ]
 
     # some of our filenames need to be remapped
