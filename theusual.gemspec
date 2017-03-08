@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Daniel Pepper']
   s.summary     = package.to_s
   s.description = 'A handful of useful hacks...good for any project'
-  s.homepage    = "https://github.com/d1hotpep/#{package_name}rb"
+  s.homepage    = "https://github.com/dpep/#{package_name}rb"
   s.license     = 'MIT'
 
   s.files       = Dir.glob('lib/**/*')
