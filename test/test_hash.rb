@@ -324,6 +324,26 @@ class HashTest < Minitest::Test
   end
 
 
+  def test_default_value
+    data = Hash.new 123
+
+    assert_equal(
+      123,
+      data.kmap {|v| nil }[:abc]
+    )
+
+    assert_equal(
+      123,
+      data.vmap {|v| nil }[:abc]
+    )
+
+    assert_equal(
+      123,
+      data.hmap {|v| nil }[:abc]
+    )
+  end
+
+
   def test_ksort
     data = {
       cx: 2,

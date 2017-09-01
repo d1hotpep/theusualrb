@@ -72,7 +72,7 @@ class Hash
 
   # map the block's results back to a hash
   def hmap(&block)
-    Hash[ map {|k, v| block.call(k, v) }.compact ]
+    clone.clear.merge Hash[ map {|k, v| block.call(k, v) }.compact ]
   end
 
   def hmap!(&block)
@@ -83,7 +83,7 @@ class Hash
   # map keys, but preserve associated values
   # ie. http://apidock.com/rails/v4.2.7/Hash/transform_keys
   def kmap(&block)
-    Hash[map do |k, v|
+    clone.clear.merge Hash[map do |k, v|
       [ block.arity == 1 ? block.call(k) : block.call(k, v), v ]
     end]
   end
