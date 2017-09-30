@@ -148,12 +148,17 @@ class Hash
   end
 
 
-  def symbolize_keys
-    clone.symbolize_keys!
+  def symbolize_keys(deep = false)
+    Hash.map each do |k, v|
+      [
+        k.respond_to?(:to_sym) ? k.to_sym : k,
+        (deep and v.is_a?(Hash)) ? v.symbolize_keys : v
+      ]
+    end
   end
 
-  def symbolize_keys!
-    kmap! { |key| key.to_sym rescue key }
+  def symbolize_keys!(deep = false)
+    replace symbolize_keys deep
   end
 
 

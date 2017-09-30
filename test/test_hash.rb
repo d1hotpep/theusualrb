@@ -428,4 +428,38 @@ class HashTest < Minitest::Test
     )
   end
 
+
+  def test_symbolize_keys
+    assert_equal(
+      {a: 1, b: 2, c: 3},
+      {'a' => 1, 'b' => 2, 'c' => 3}.symbolize_keys
+    )
+
+    assert_equal(
+      {a: 1, b: 2, c: { 'd' => 3 } },
+      {'a' => 1, 'b' => 2, 'c' => { 'd' => 3 } }.symbolize_keys
+    )
+
+    assert_equal(
+      {a: 1, b: 2, c: { z: 3 }, d: [ 'x' ] },
+      {
+        'a' => 1, 'b' => 2, 'c' => { 'z' => 3 }, 'd' => [ 'x' ]
+      }.symbolize_keys(true)
+    )
+
+
+    h = {'a' => 1, 'b' => 2, 'c' => 3}
+    h.symbolize_keys
+    assert_equal(
+      {'a' => 1, 'b' => 2, 'c' => 3},
+      h
+    )
+
+    h.symbolize_keys!
+    assert_equal(
+      {a: 1, b: 2, c: 3},
+      h
+    )
+  end
+
 end
