@@ -245,6 +245,11 @@ class HashTest < Minitest::Test
     }
 
     assert_equal(
+      data,
+      data.kmap(&:to_s)
+    )
+
+    assert_equal(
       {
         'aa' => 1,
         'bb' => 2,
@@ -287,6 +292,15 @@ class HashTest < Minitest::Test
       b: 2,
       c: 3,
     }
+
+    assert_equal(
+      {
+        a: 1.0,
+        b: 2.0,
+        c: 3.0,
+      },
+      data.vmap(&:to_f)
+    )
 
     assert_equal(
       {

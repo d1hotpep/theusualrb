@@ -87,13 +87,15 @@ class Hash
   # map keys, but preserve associated values
   # ie. http://apidock.com/rails/v4.2.7/Hash/transform_keys
   def kmap(&block)
-    clone.clear.merge Hash[map do |k, v|
-      [ block.arity == 1 ? block.call(k) : block.call(k, v), v ]
-    end]
+    clone.kmap! &block
   end
 
   def kmap!(&block)
-    replace kmap &block
+    replace Hash[
+      map do |k, v|
+        [ block.arity <= 1 ? block.call(k) : block.call(k, v), v ]
+      end
+    ]
   end
 
 
@@ -105,7 +107,7 @@ class Hash
 
   def vmap!(&block)
     each do |k, v|
-      self[k] = block.arity == 1 ? block.call(v) : block.call(k, v)
+      self[k] = block.arity <= 1 ? block.call(v) : block.call(k, v)
     end
   end
 
