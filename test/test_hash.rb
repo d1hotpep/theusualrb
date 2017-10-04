@@ -18,6 +18,11 @@ class HashTest < Minitest::Test
     )
 
     assert_equal(
+      data,
+      Hash.map(data.keys) {|x| data[x]}
+    )
+
+    assert_equal(
       {},
       Hash.map([]) {|x| nil}
     )

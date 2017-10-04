@@ -4,11 +4,15 @@ class Hash
 
     # map any Enumerable into a Hash, like Hash[obj.map ... ]
     def map(obj, &block)
-      Hash[
-        obj.map do |*args|
-          block.call *args
-        end.compact
-      ]
+      res = obj.map do |*args|
+        block.call *args
+      end.compact
+
+      if res.all? {|x| x.is_a? Array and x.count == 2 }
+        Hash[res]
+      else
+        Hash[obj.zip(res)]
+      end
     end
 
   end # class << self
