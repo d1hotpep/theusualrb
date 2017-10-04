@@ -2,7 +2,7 @@ class Array
   #####  Numerical Operations  #####
   def sum
     numerics?
-    inject 0, &:+
+    reduce &:+
   end
   alias_method :total, :sum
 
@@ -47,24 +47,21 @@ class Array
 
   #####  Misc Operations  #####
   def compact(modifier = nil)
+    clone.compact! modifier
+  end
+
+  def compact!(modifier = nil)
     falsy = modifier == :falsy
     blanks = falsy || modifier == :blanks
 
-    reject do |v|
+    reject! do |v|
       isblank = blanks && v.respond_to?(:empty?) && v.empty?
       isfalsy = falsy && (v == 0)
 
       !v || isblank || isfalsy
     end
-  end
 
-  def compact!(modifier = nil)
-    res = compact(modifier)
-    clear
-
-    # TODO: is there a better way than shift/reverse?
-    res.each {|x| unshift x}
-    reverse!
+    self
   end
 
 
