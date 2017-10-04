@@ -47,9 +47,7 @@ class Hash
       keys = keys.first
     end
 
-    Hash.map keys do |k|
-      [ k, self[k] ]
-    end
+    Hash.map(keys) {|k| self[k] }
   end
   alias_method :slice, :select_keys
 
