@@ -37,7 +37,7 @@ class Array
 
 
   def gsub(regex, replacement)
-    map { |string| string.gsub(regex, replacement) }
+    clone.gsub! regex, replacement
   end
 
   def gsub!(regex, replacement)
