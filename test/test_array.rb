@@ -5,6 +5,28 @@ TheUsual::load 'array'
 
 class ArrayTest < Minitest::Test
 
+  def test_wrap
+    assert_equal(
+      [],
+      Array.wrap(nil)
+    )
+
+    assert_equal(
+      [],
+      Array.wrap([])
+    )
+
+    assert_equal(
+      [1],
+      Array.wrap(1)
+    )
+
+    assert_equal(
+      [1,2,3],
+      Array.wrap([1,2,3])
+    )
+  end
+
   def test_sum
     assert_equal(
       6,

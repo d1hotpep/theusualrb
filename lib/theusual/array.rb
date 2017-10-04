@@ -1,4 +1,20 @@
 class Array
+  class << self
+
+    def wrap(object)
+      # https://apidock.com/rails/Array/wrap/class
+      if object.nil?
+        []
+      elsif object.respond_to?(:to_ary)
+        object.to_ary || [object]
+      else
+        [object]
+      end
+    end
+
+  end # class << self
+
+
   #####  Numerical Operations  #####
   def sum
     numerics?
