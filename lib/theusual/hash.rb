@@ -47,10 +47,12 @@ class Hash
       [ k, self[k] ]
     end
   end
+  alias_method :slice, :select_keys
 
   def select_keys!(*keys)
     replace select_keys *keys
   end
+  alias_method :slice!, :select_keys!
 
 
   def compact(modifier = nil)

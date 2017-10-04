@@ -126,6 +126,12 @@ class HashTest < Minitest::Test
       {c: 2, a: 1},
       data
     )
+
+    # check alias
+    assert_equal(
+      {c: 2, a: 1},
+      data.slice(:c, :a)
+    )
   end
 
 
