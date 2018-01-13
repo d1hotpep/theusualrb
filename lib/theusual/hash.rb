@@ -11,7 +11,7 @@ class Hash
       if res.all? {|x| x.is_a? Array and x.count == 2 }
         Hash[res]
       else
-        Hash[obj.zip(res)]
+        Hash[obj.zip res]
       end
     end
 
