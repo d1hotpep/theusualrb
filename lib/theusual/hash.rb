@@ -6,7 +6,7 @@ class Hash
     def map(obj, &block)
       res = obj.map do |*args|
         block.call *args
-      end.compact
+      end
 
       if res.all? {|x| x.is_a? Array and x.count == 2 }
         Hash[res]

@@ -28,12 +28,17 @@ class HashTest < Minitest::Test
     )
 
     assert_equal(
-      {},
+      { 1 => nil, 2 => nil, 3 => nil },
       Hash.map([1,2,3]) {|x| nil}
     )
 
     assert_equal(
-      {nil => 3},
+      { 3 => true },
+      Hash.map([1,2,3]) {|x| true if x > 2 }.compact
+    )
+
+    assert_equal(
+      { nil => 3 },
       Hash.map([1,2,3]) {|x| [nil, x]}
     )
   end
