@@ -12,11 +12,7 @@ class HashTest < Minitest::Test
       a: 1,
     }
 
-    assert_equal(
-      data,
-      Hash.map(data.keys) {|x| [x, data[x]]}
-    )
-
+    # Hash.map
     assert_equal(
       data,
       Hash.map(data.keys) {|x| data[x]}
@@ -38,8 +34,39 @@ class HashTest < Minitest::Test
     )
 
     assert_equal(
+      { 1 => [ 2, 3 ] },
+      Hash.map([1]) {|x| [ 2, 3 ] }
+    )
+
+    # Hash.hmap
+    assert_equal(
+      { 2 => 3 },
+      Hash.hmap([1]) {|x| [ 2, 3 ] }
+    )
+
+    assert_equal(
+      data,
+      Hash.hmap(data) {|k, v| [k, v]}
+    )
+
+    assert_equal(
+      data,
+      Hash.hmap(data.keys) {|x| [x, data[x]]}
+    )
+
+    assert_equal(
       { nil => 3 },
-      Hash.map([1,2,3]) {|x| [nil, x]}
+      Hash.hmap([1,2,3]) {|x| [nil, x]}
+    )
+
+    assert_equal(
+      {},
+      Hash.hmap([]) {|x| nil}
+    )
+
+    assert_equal(
+      {},
+      Hash.hmap([1, 2, 3]) {|x| nil}
     )
   end
 

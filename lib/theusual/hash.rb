@@ -2,17 +2,23 @@ class Hash
 
   class << self
 
-    # map any Enumerable into a Hash, like Hash[obj.map ... ]
+    # create Hash from given keys and mapped values
     def map(obj, &block)
       res = obj.map do |*args|
         block.call *args
       end
 
-      if res.all? {|x| x.is_a? Array and x.count == 2 }
-        Hash[res]
-      else
-        Hash[obj.zip res]
-      end
+      Hash[obj.zip res]
+    end
+
+
+    # map an Enumerable into a Hash, like Hash[obj.map ... ]
+    def hmap(obj, &block)
+      Hash[
+        obj.map do |*args|
+          block.call *args
+        end.compact
+      ]
     end
 
   end # class << self
@@ -155,7 +161,7 @@ class Hash
 
 
   def symbolize_keys(deep = false)
-    Hash.map each do |k, v|
+    Hash.hmap each do |k, v|
       [
         k.respond_to?(:to_sym) ? k.to_sym : k,
         (deep and v.is_a?(Hash)) ? v.symbolize_keys : v
